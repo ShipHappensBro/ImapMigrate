@@ -83,7 +83,7 @@ Python-зависимости:
 Клонируйте репозиторий:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ShipHappensBro/ImapMigrate.git
 cd ImapMigrate
 ```
 
