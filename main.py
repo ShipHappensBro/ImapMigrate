@@ -74,7 +74,7 @@ def main(
                 "Не удалось корректно закрыть IMAP-соединение",
             )
 
-    workers_count = max(len(folders), 16)
+    workers_count = min(len(folders), 16)
 
     logger.info(
         "Запускаем миграцию: {} папок, {} workers",
