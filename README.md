@@ -230,7 +230,7 @@ logs/
 Количество workers определяется автоматически:
 
 ```python
-workers_count = max(len(folders), 16)
+workers_count = min(len(folders), 16)
 ```
 
 Папки распределяются между workers с учётом количества сообщений.
