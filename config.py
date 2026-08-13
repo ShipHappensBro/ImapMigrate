@@ -10,11 +10,10 @@ def get_env(name: str) -> str:
     value = os.getenv(name)
 
     if not value:
-        raise RuntimeError(
-            f"Environment variable {name!r} is not set"
-        )
+        raise RuntimeError(f"Environment variable {name!r} is not set")
 
     return value
+
 
 LOG_DIR = Path("./logs/imapsync")
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -45,6 +44,7 @@ __all__ = (
     "HOST",
     "HOST1",
     "HOST2",
+    "LOG_DIR",
     "PASSWORD",
     "PASSWORD1",
     "PASSWORD2",
