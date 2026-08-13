@@ -1,16 +1,13 @@
 import subprocess
 import threading
-from pathlib import Path
 
 from loguru import logger
 from tqdm import tqdm
 
+from config import LOG_DIR
 from dto import ImapFolder
 
 _STOP_EVENT = threading.Event()
-
-LOG_DIR = Path("./logs/imapsync")
-LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def run_imapsync(
@@ -30,22 +27,28 @@ def run_imapsync(
 
     command = [
         "./imapsync",
-
-        "--host1", host1,
-        "--authuser1", auth_user1,
-        "--user1", user1,
-        "--password1", password1,
-
-        "--host2", host2,
-        "--authuser2", auth_user2,
-        "--user2", user2,
-        "--password2", password2,
-
-        "--folder", folder.imap_name,
-
+        "--host1",
+        host1,
+        "--authuser1",
+        auth_user1,
+        "--user1",
+        user1,
+        "--password1",
+        password1,
+        "--host2",
+        host2,
+        "--authuser2",
+        auth_user2,
+        "--user2",
+        user2,
+        "--password2",
+        password2,
+        "--folder",
+        folder.imap_name,
         "--nofoldersizes",
         "--nofoldersizesatend",
-        "--maxsleep", "0",
+        "--maxsleep",
+        "0",
         "--nolog",
     ]
 
@@ -57,6 +60,8 @@ def run_imapsync(
         folder.name,
         folder.msg_count,
     )
+
+    process: subprocess.Popen[bytes] | None = None
 
     try:
         with log_file.open("w", encoding="utf-8") as log:
@@ -72,6 +77,13 @@ def run_imapsync(
     except KeyboardInterrupt:
         _STOP_EVENT.set()
 
+        if process is None:
+            logger.warning(
+                "imapsync process не был запущен {}",
+                folder.name,
+            )
+            return
+
         logger.warning(
             "Останавливаем imapsync: {}",
             folder.name,
@@ -83,8 +95,8 @@ def run_imapsync(
             process.wait(timeout=5)
         except subprocess.TimeoutExpired:
             logger.warning(
-                "imapsync не завершился за 5 секунд: {}. "
-                "Отправляем SIGKILL",
+                "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
+                "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
                 folder.name,
             )
 
