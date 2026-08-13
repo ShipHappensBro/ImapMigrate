@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -15,6 +16,8 @@ def get_env(name: str) -> str:
 
     return value
 
+LOG_DIR = Path("./logs/imapsync")
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 HOST = get_env("HOST")
 PORT = int(get_env("PORT"))
