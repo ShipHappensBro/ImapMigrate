@@ -7,8 +7,8 @@ from tqdm import tqdm
 from config import *
 from logger import logger
 from services.imap import *
-from worker import distribute_folders, worker
-from services.worker import WorkerRunner, WorkerDistributer
+from services.worker import WorkerDistributer, WorkerRunner
+
 
 def main(
     current_user: str,
