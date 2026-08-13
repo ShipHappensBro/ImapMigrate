@@ -69,11 +69,11 @@ def main(
     finally:
         try:
             imap.close()
-        except Exception:
-            logger.warning(
+        except Exception:  # noqa: BLE001
+            logger.exception(
                 "Не удалось корректно закрыть IMAP-соединение",
             )
-
+            
     workers_count = min(len(folders), 16)
 
     logger.info(
