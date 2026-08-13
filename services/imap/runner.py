@@ -96,7 +96,6 @@ def run_imapsync(
         except subprocess.TimeoutExpired:
             logger.warning(
                 "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
-                "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
                 folder.name,
             )
 
