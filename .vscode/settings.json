@@ -1,8 +1,5 @@
 {
     "python.envFile": "${workspaceFolder}/.env",
-    "python.analysis.extraPaths": [
-        "./parser"
-    ],
     "python.terminal.useEnvFile": true,
     "python.analysis.typeCheckingMode": "standard",
     "python.analysis.diagnosticMode": "workspace",
