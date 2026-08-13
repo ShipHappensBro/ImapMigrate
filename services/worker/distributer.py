@@ -6,7 +6,7 @@ from services.worker.interfaces import IWorkerDistributer
 class WorkerDistributer(IWorkerDistributer):
 
     def distribute(
-            self, folders: list[ImapFolder], workers_count: int
+        self, folders: list[ImapFolder], workers_count: int
     ) -> list[Worker]:
         workers = [
             Worker(
