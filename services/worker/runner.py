@@ -1,6 +1,6 @@
 from dto import ImapFolder
-from imapsync_process import run_imapsync
 from logger import logger
+from services.imap.runner import run_imapsync
 from services.worker.interfaces import IWorkerRunner
 
 
