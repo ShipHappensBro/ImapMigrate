@@ -1,19 +1,12 @@
-from dto import ImapFolder
+from dto.imap_folder import ImapFolder
 from logger import logger
 from services.imap.runner import run_imapsync
 from services.worker.interfaces import IWorkerRunner
 
 
 class WorkerRunner(IWorkerRunner):
-
-    def run(
-        self, id: int, folders: list[ImapFolder],
-        *args, **kwargs
-    ) -> None:
-        message_count = sum(
-            folder.msg_count
-            for folder in folders
-        )
+    def run(self, id: int, folders: list[ImapFolder], *args, **kwargs) -> None:
+        message_count = sum(folder.msg_count for folder in folders)
 
         logger.info(
             "Worker {} запущен: {} папок, {} сообщений",
@@ -25,8 +18,7 @@ class WorkerRunner(IWorkerRunner):
         try:
             for folder in folders:
                 logger.debug(
-                    "Worker {}: начинаем миграцию папки {} "
-                    "({} сообщений)",
+                    "Worker {}: начинаем миграцию папки {} ({} сообщений)",
                     id,
                     folder.name,
                     folder.msg_count,

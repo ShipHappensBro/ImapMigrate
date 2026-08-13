@@ -1,11 +1,10 @@
 import imaplib
 
-from dto import ImapFolder
+from dto.imap_folder import ImapFolder
 from services.imap.folders.interfaces import IImapFolderParser, IImapFolderProvider
 
 
 class ImapFolderProvider(IImapFolderProvider):
-
     def __init__(self, parser: IImapFolderParser) -> None:
         self.parser = parser
 
@@ -16,9 +15,7 @@ class ImapFolderProvider(IImapFolderProvider):
         status, folders = imap.list()
 
         if status != "OK" or folders is None:
-            raise RuntimeError(
-                f"Не удалось получить список папок: {status}"
-            )
+            raise RuntimeError(f"Не удалось получить список папок: {status}")
 
         result: list[ImapFolder] = []
 
