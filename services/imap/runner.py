@@ -1,16 +1,13 @@
 import subprocess
 import threading
-from pathlib import Path
 
 from loguru import logger
 from tqdm import tqdm
 
+from config import LOG_DIR
 from dto import ImapFolder
 
 _STOP_EVENT = threading.Event()
-
-LOG_DIR = Path("./logs/imapsync")
-LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def run_imapsync(
@@ -86,18 +83,19 @@ def run_imapsync(
                 folder.name,
             )
             return
-        
+
         logger.warning(
             "Останавливаем imapsync: {}",
             folder.name,
         )
-        
+
         process.terminate()
 
         try:
             process.wait(timeout=5)
         except subprocess.TimeoutExpired:
             logger.warning(
+                "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
                 "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
                 folder.name,
             )
