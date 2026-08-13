@@ -7,7 +7,7 @@ from tqdm import tqdm
 from config import *
 from logger import logger
 from services.imap import *
-from worker import distribute_folders, worker
+from services.worker import WorkerDistributer, WorkerRunner
 
 
 def main(
@@ -82,10 +82,14 @@ def main(
         workers_count,
     )
 
-    workers = distribute_folders(
+    distributer = WorkerDistributer()
+
+    workers = distributer.distribute(
         folders,
         workers_count=workers_count,
     )
+
+    runner = WorkerRunner()
 
     with (
         tqdm(
@@ -99,7 +103,7 @@ def main(
     ):
         futures = [
             executor.submit(
-                worker,
+                runner.run,
                 worker_data.id,
                 folders=worker_data.folders,
                 host1=HOST,
