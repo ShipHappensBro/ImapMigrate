@@ -1,13 +1,11 @@
-from dto import ImapFolder, Worker
+from dto.imap_folder import ImapFolder
+from dto.worker import Worker
 from logger import logger
 from services.worker.interfaces import IWorkerDistributer
 
 
 class WorkerDistributer(IWorkerDistributer):
-
-    def distribute(
-        self, folders: list[ImapFolder], workers_count: int
-    ) -> list[Worker]:
+    def distribute(self, folders: list[ImapFolder], workers_count: int) -> list[Worker]:
         workers = [
             Worker(
                 id=i + 1,

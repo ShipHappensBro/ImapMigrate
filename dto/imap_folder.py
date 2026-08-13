@@ -9,9 +9,3 @@ class ImapFolder:
     flags: tuple[str, ...]
     separator: str
     msg_count: int
-
-@dataclass
-class Worker:
-    id: int
-    folders: list[ImapFolder]
-    msg_count: int = 0

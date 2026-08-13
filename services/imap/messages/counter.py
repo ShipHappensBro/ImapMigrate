@@ -1,11 +1,10 @@
 import imaplib
 
-from dto import ImapFolder
+from dto.imap_folder import ImapFolder
 from services.imap.messages.interfaces import IImapMessageCounter
 
 
 class ImapMessageCounter(IImapMessageCounter):
-
     def get_count(
         self,
         imap: imaplib.IMAP4_SSL,
@@ -17,9 +16,7 @@ class ImapMessageCounter(IImapMessageCounter):
         )
 
         if status != "OK":
-            raise RuntimeError(
-                f"Не удалось открыть папку {folder.name}: {data}"
-            )
+            raise RuntimeError(f"Не удалось открыть папку {folder.name}: {data}")
 
         if not data or data[0] is None:
             raise RuntimeError(

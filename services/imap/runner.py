@@ -4,8 +4,8 @@ import threading
 from loguru import logger
 from tqdm import tqdm
 
-from config import LOG_DIR
-from dto import ImapFolder
+from config.settings import LOG_DIR
+from dto.imap_folder import ImapFolder
 
 _STOP_EVENT = threading.Event()
 
@@ -95,7 +95,6 @@ def run_imapsync(
             process.wait(timeout=5)
         except subprocess.TimeoutExpired:
             logger.warning(
-                "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
                 "imapsync не завершился за 5 секунд: {}. Отправляем SIGKILL",
                 folder.name,
             )
