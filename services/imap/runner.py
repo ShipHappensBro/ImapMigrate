@@ -4,8 +4,8 @@ import threading
 from loguru import logger
 from tqdm import tqdm
 
-from config import LOG_DIR
-from dto import ImapFolder
+from config.settings import LOG_DIR
+from dto.imap_folder import ImapFolder
 
 _STOP_EVENT = threading.Event()
 
