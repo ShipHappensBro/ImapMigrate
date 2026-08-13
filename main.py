@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from tqdm import tqdm
 
-from config import *
+from config.settings import *
 from logger import logger
 from services.imap import *
 from services.worker import WorkerDistributer, WorkerRunner
@@ -19,15 +19,10 @@ def main(
         current_user,
         target_user,
     )
-    authenticator = ImapAuthenticator(
-        AUTH_USER,
-        PASSWORD
-    )
+    authenticator = ImapAuthenticator(AUTH_USER, PASSWORD)
     foler_parser = ImapFolderParser()
-    folder_provider = ImapFolderProvider(
-        foler_parser
-    )
-    
+    folder_provider = ImapFolderProvider(foler_parser)
+
     message_counter = ImapMessageCounter()
 
     imap = imaplib.IMAP4_SSL(HOST, PORT)
@@ -73,7 +68,7 @@ def main(
             logger.exception(
                 "Не удалось корректно закрыть IMAP-соединение",
             )
-            
+
     workers_count = min(len(folders), 16)
 
     logger.info(
@@ -132,6 +127,7 @@ def main(
         target_user,
     )
 
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="IMAP mailbox migration",
@@ -148,6 +144,7 @@ def parse_args() -> argparse.Namespace:
     )
 
     return parser.parse_args()
+
 
 if __name__ == "__main__":
     args = parse_args()
