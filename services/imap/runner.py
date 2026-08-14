@@ -21,6 +21,8 @@ def run_imapsync(
     password1: str,
     password2: str,
     progress: tqdm,
+    port1: int = 993,
+    port2: int = 993,
 ) -> None:
     if _STOP_EVENT.is_set():
         return
@@ -29,6 +31,8 @@ def run_imapsync(
         "./imapsync",
         "--host1",
         host1,
+        "--port1",
+        str(port1),
         "--authuser1",
         auth_user1,
         "--user1",
@@ -37,6 +41,8 @@ def run_imapsync(
         password1,
         "--host2",
         host2,
+        "--port2",
+        str(port2),
         "--authuser2",
         auth_user2,
         "--user2",
