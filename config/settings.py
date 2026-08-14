@@ -18,38 +18,24 @@ def get_env(name: str) -> str:
 LOG_DIR = Path("./logs/imapsync")
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-HOST = get_env("HOST")
-PORT = int(get_env("PORT"))
+SOURCE_SERVER = get_env("SOURCE_SERVER")
+PORT_SOURCE = int(get_env("PORT_SOURCE"))
+AUTH_USER_SOURCE = get_env("AUTH_USER_SOURCE")
+PASSWORD_SOURCE = get_env("PASSWORD_SOURCE")
 
-AUTH_USER = get_env("AUTH_USER")
-TARGET_USER = get_env("TARGET_USER")
-PASSWORD = get_env("PASSWORD")
-
-HOST1 = get_env("HOST1")
-AUTHUSER1 = get_env("AUTHUSER1")
-PASSWORD1 = get_env("PASSWORD1")
-
-HOST2 = get_env("HOST2")
-AUTHUSER2 = get_env("AUTHUSER2")
-PASSWORD2 = get_env("PASSWORD2")
-
-USER1 = get_env("USER1")
-USER2 = get_env("USER2")
-
+TARGET_SERVER = get_env("TARGET_SERVER")
+PORT_TARGET = int(get_env("PORT_TARGET"))
+AUTH_USER_TARGET = get_env("AUTH_USER_TARGET")
+PASSWORD_TARGET = get_env("PASSWORD_TARGET")
 
 __all__ = (
-    "AUTHUSER1",
-    "AUTHUSER2",
-    "AUTH_USER",
-    "HOST",
-    "HOST1",
-    "HOST2",
+    "AUTH_USER_SOURCE",
+    "PASSWORD_SOURCE",
+    "AUTH_USER_TARGET",
+    "PASSWORD_TARGET",
+    "SOURCE_SERVER",
+    "TARGET_SERVER",
+    "PORT_SOURCE",
+    "PORT_TARGET",
     "LOG_DIR",
-    "PASSWORD",
-    "PASSWORD1",
-    "PASSWORD2",
-    "PORT",
-    "TARGET_USER",
-    "USER1",
-    "USER2",
 )
