@@ -116,42 +116,29 @@ chmod +x ./imapsync
 Создайте файл `.env` в корне проекта:
 
 ```dotenv
-HOST=mail.example.ru
-PORT=993
+AUTH_USER_SOURCE = "example@example.ru"
+PASSWORD_SOURCE = "superpass_source"
+AUTH_USER_TARGET = "example@example.org"
+PASSWORD_TARGET = "superpass_target"
 
-AUTH_USER=example@example.ru
-TARGET_USER=example@example.org
-PASSWORD=superpass
-
-HOST1=mail.example.ru
-AUTHUSER1=example@example.ru
-PASSWORD1=superpass
-
-HOST2=mail.example.ru
-AUTHUSER2=example@example.org
-PASSWORD2=superpass
-
-USER1=example@example.ru
-USER2=example@example.org
+SOURCE_SERVER = "mail.example.ru"
+TARGET_SERVER = "mail.example.org"
+PORT_SOURCE = 993
+PORT_TARGET = 993
 ```
 
 ### Описание параметров
 
 | Переменная    | Назначение                                        |
 | ------------- | ------------------------------------------------- |
-| `HOST`        | IMAP-сервер исходного ящика                       |
-| `PORT`        | IMAP-порт                                         |
-| `AUTH_USER`   | Пользователь для авторизации при получении данных |
-| `TARGET_USER` | Целевой пользователь                              |
-| `PASSWORD`    | Пароль исходного ящика                            |
-| `HOST1`       | IMAP-сервер источника для `imapsync`              |
-| `AUTHUSER1`   | Пользователь авторизации источника                |
-| `PASSWORD1`   | Пароль источника                                  |
-| `HOST2`       | IMAP-сервер назначения                            |
-| `AUTHUSER2`   | Пользователь авторизации назначения               |
-| `PASSWORD2`   | Пароль назначения                                 |
-| `USER1`       | Пользователь источника                            |
-| `USER2`       | Пользователь назначения                           |
+| `SOURCE_SERVER`       | IMAP-сервер источника              |
+| `PORT_SOURCE`        | IMAP-порт сервера источника                                         |
+| `AUTH_USER_SOURCE`   | Учетная запись имперсонации источника                |
+| `PASSWORD_SOURCE`   | Пароль учетной записи имперсонации источника                                  |
+| `TARGET_SERVER`       | IMAP-сервер назначения              |
+| `PORT_TARGET`        | IMAP-порт назначения источника                                         |
+| `AUTH_USER_TARGET`   | Учетная запись имперсонации назначения                |
+| `PASSWORD_TARGET`   | Пароль учетной записи имперсонации назначения
 
 > **Важно:** файл `.env` содержит учётные данные и не должен попадать в Git.
 
