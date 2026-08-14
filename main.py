@@ -25,10 +25,10 @@ def main(
 
     message_counter = ImapMessageCounter()
 
-    imap = imaplib.IMAP4_SSL(HOST, PORT)
+    imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
 
     try:
-        logger.info("Подключение к IMAP: {}:{}", HOST, PORT)
+        logger.info("Подключение к IMAP: {}:{}", SOURCE_SERVER, PORT_SOURCE)
         authenticator.authenticate(
             user=current_user,
             imap=imap,
@@ -101,14 +101,16 @@ def main(
                 runner.run,
                 worker_data.id,
                 folders=worker_data.folders,
-                host1=HOST,
-                host2=HOST2,
+                host1=SOURCE_SERVER,
+                host2=TARGET_SERVER,
+                port1=PORT_SOURCE,
+                port2=PORT_TARGET,
                 user1=current_user,
                 user2=target_user,
-                auth_user1=AUTHUSER1,
-                auth_user2=AUTHUSER2,
-                password1=PASSWORD1,
-                password2=PASSWORD2,
+                auth_user1=AUTH_USER_SOURCE,
+                auth_user2=AUTH_USER_TARGET,
+                password1=PASSWORD_SOURCE,
+                password2=PASSWORD_TARGET,
                 progress=progress,
             )
             for worker_data in workers
