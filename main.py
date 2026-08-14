@@ -19,7 +19,7 @@ def main(
         current_user,
         target_user,
     )
-    authenticator = ImapAuthenticator(AUTH_USER, PASSWORD)
+    authenticator = ImapAuthenticator(AUTH_USER_SOURCE, PASSWORD_SOURCE)
     foler_parser = ImapFolderParser()
     folder_provider = ImapFolderProvider(foler_parser)
 
