@@ -7,13 +7,24 @@ from tqdm import tqdm
 from config.settings import *
 from logger import logger
 from services.imap import *
+from services.imap.dry_run.runner import ImapSyncDryRun
 from services.worker import WorkerDistributer, WorkerRunner
 
 
-def main(
-    current_user: str,
-    target_user: str,
-) -> None:
+def main(current_user: str, target_user: str, enable_dry: bool) -> None:
+    if enable_dry:
+        ImapSyncDryRun().dry_run(
+            host1=SOURCE_SERVER,
+            host2=TARGET_SERVER,
+            port1=PORT_SOURCE,
+            port2=PORT_TARGET,
+            user1=current_user,
+            user2=target_user,
+            auth_user1=AUTH_USER_SOURCE,
+            auth_user2=AUTH_USER_TARGET,
+            password1=PASSWORD_SOURCE,
+            password2=PASSWORD_TARGET,
+        )
     logger.info(
         "Начинаем миграцию: {} -> {}",
         current_user,
@@ -145,6 +156,14 @@ def parse_args() -> argparse.Namespace:
         help="Целевой IMAP пользователь",
     )
 
+    parser.add_argument(
+        "--no-dry",
+        dest="enable_dry",
+        action="store_false",
+        default=True,
+        help="Отключить dry-run",
+    )
+
     return parser.parse_args()
 
 
@@ -154,4 +173,5 @@ if __name__ == "__main__":
     main(
         current_user=args.current_user,
         target_user=args.target_user,
+        enable_dry=args.enable_dry,
     )

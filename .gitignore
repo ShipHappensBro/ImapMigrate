@@ -163,4 +163,5 @@ cython_debug/
 #.idea/
 
 logs/
+LOG_imapsync/
 .vscode/
