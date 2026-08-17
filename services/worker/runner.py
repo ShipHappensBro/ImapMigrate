@@ -1,11 +1,12 @@
 from dto.imap_folder import ImapFolder
 from logger import logger
-from services.imap.runner import run_imapsync
+from services.imap.folders.runner import ImapSyncFolderRunner
 from services.worker.interfaces import IWorkerRunner
 
 
 class WorkerRunner(IWorkerRunner):
     def run(self, id: int, folders: list[ImapFolder], *args, **kwargs) -> None:
+
         message_count = sum(folder.msg_count for folder in folders)
 
         logger.info(
@@ -23,9 +24,9 @@ class WorkerRunner(IWorkerRunner):
                     folder.name,
                     folder.msg_count,
                 )
-
-                run_imapsync(
-                    folder,
+                runner = ImapSyncFolderRunner()
+                runner.run(
+                    folder=folder,
                     **kwargs,
                 )
 
