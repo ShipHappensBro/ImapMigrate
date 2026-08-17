@@ -179,7 +179,7 @@ python main.py --help
 Пример:
 
 ```text
-usage: main.py [-h] [--dry] current_user target_user
+usage: main.py [-h] [--dry] [--verify] current_user target_user
 
 IMAP mailbox migration
 
@@ -190,6 +190,7 @@ positional arguments:
 options:
   -h, --help    show this help message and exit
   --dry         Включить dry-run
+  --verify      Включить проверку количества сообщений между серверами
 ```
 
 ## Логирование
@@ -297,7 +298,7 @@ chmod 600 .env
 * [ ] Повторный запуск только неудачных папок
 * [ ] Итоговый отчёт о миграции
 * [ ] Статистика перенесённых сообщений
-* [ ] Проверка количества сообщений после миграции
+* [x] Проверка количества сообщений после миграции
 * [x] Dry-run режим
 * [ ] Настройка количества workers через CLI
 * [ ] Возможность ограничивать нагрузку на IMAP-сервер

@@ -1,13 +1,10 @@
 import imaplib
-from abc import ABC, abstractmethod
+from typing import Protocol
 
 
-class IImapAuthenticator(ABC):
-
-    @abstractmethod
+class IImapAuthenticator(Protocol):
     def authenticate(
         self,
         user: str,
         imap: imaplib.IMAP4_SSL,
-    ) -> None:
-        ...
+    ) -> None: ...
