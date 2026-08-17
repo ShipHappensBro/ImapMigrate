@@ -111,6 +111,20 @@ poetry install
 chmod +x ./imapsync
 ```
 
+---
+
+Убедитесь, что все зависимости `imapsync` установлены
+
+[Список с инструкциями по установке](https://github.com/imapsync/imapsync/tree/master/INSTALL.d)
+
+---
+
+Запустите dry run
+
+```bash
+./imapsync --dry
+```
+
 ## Конфигурация
 
 Создайте файл `.env` в корне проекта:
