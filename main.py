@@ -157,11 +157,11 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--no-dry",
+        "--dry",
         dest="enable_dry",
-        action="store_false",
-        default=True,
-        help="Отключить dry-run",
+        action="store_true",
+        default=False,
+        help="Включить dry-run",
     )
 
     return parser.parse_args()

@@ -179,7 +179,7 @@ python main.py --help
 Пример:
 
 ```text
-usage: main.py [-h] [--no-dry] current_user target_user
+usage: main.py [-h] [--dry] current_user target_user
 
 IMAP mailbox migration
 
@@ -189,7 +189,7 @@ positional arguments:
 
 options:
   -h, --help    show this help message and exit
-  --no-dry      Отключить dry-run
+  --dry         Включить dry-run
 ```
 
 ## Логирование
