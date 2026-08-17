@@ -9,9 +9,12 @@ from logger import logger
 from services.imap import *
 from services.imap.dry_run.runner import ImapSyncDryRun
 from services.worker import WorkerDistributer, WorkerRunner
+from verifier import verify
 
 
-def main(current_user: str, target_user: str, enable_dry: bool) -> None:
+def main(
+    current_user: str, target_user: str, enable_dry: bool, enable_verify: bool
+) -> None:
     if enable_dry:
         ImapSyncDryRun().dry_run(
             host1=SOURCE_SERVER,
@@ -31,32 +34,32 @@ def main(current_user: str, target_user: str, enable_dry: bool) -> None:
         target_user,
     )
     authenticator = ImapAuthenticator(AUTH_USER_SOURCE, PASSWORD_SOURCE)
-    foler_parser = ImapFolderParser()
-    folder_provider = ImapFolderProvider(foler_parser)
+    folder_parser = ImapFolderParser()
+    folder_provider = ImapFolderProvider(folder_parser)
 
     message_counter = ImapMessageCounter()
 
-    imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
+    source_imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
 
     try:
         logger.info("Подключение к IMAP: {}:{}", SOURCE_SERVER, PORT_SOURCE)
         authenticator.authenticate(
             user=current_user,
-            imap=imap,
+            imap=source_imap,
         )
         logger.success(
             "Авторизация пользователя {} выполнена",
             current_user,
         )
 
-        folders = folder_provider.get(imap)
+        source_folders = folder_provider.get(source_imap)
         logger.info(
             "Получено папок: {}",
-            len(folders),
+            len(source_folders),
         )
-        for folder in folders:
+        for folder in source_folders:
             folder.msg_count = message_counter.get_count(
-                imap=imap,
+                imap=source_imap,
                 folder=folder,
             )
             logger.debug(
@@ -74,24 +77,24 @@ def main(current_user: str, target_user: str, enable_dry: bool) -> None:
 
     finally:
         try:
-            imap.close()
+            source_imap.close()
         except Exception:  # noqa: BLE001
             logger.exception(
                 "Не удалось корректно закрыть IMAP-соединение",
             )
 
-    workers_count = min(len(folders), 16)
+    workers_count = min(len(source_folders), 16)
 
     logger.info(
         "Запускаем миграцию: {} папок, {} workers",
-        len(folders),
+        len(source_folders),
         workers_count,
     )
 
     distributer = WorkerDistributer()
 
     workers = distributer.distribute(
-        folders,
+        source_folders,
         workers_count=workers_count,
     )
 
@@ -99,7 +102,7 @@ def main(current_user: str, target_user: str, enable_dry: bool) -> None:
 
     with (
         tqdm(
-            total=len(folders),
+            total=len(source_folders),
             desc="Migration",
             unit="folder",
         ) as progress,
@@ -134,11 +137,14 @@ def main(current_user: str, target_user: str, enable_dry: bool) -> None:
                 logger.exception(
                     "Ошибка при выполнении worker",
                 )
+
     logger.success(
         "Миграция {} -> {} завершена",
         current_user,
         target_user,
     )
+    if enable_verify:
+        verify(source_folders, target_user)
 
 
 def parse_args() -> argparse.Namespace:
@@ -164,6 +170,14 @@ def parse_args() -> argparse.Namespace:
         help="Включить dry-run",
     )
 
+    parser.add_argument(
+        "--verify",
+        dest="enable_verify",
+        action="store_true",
+        default=False,
+        help="Включить проверку количества сообщений между серверами",
+    )
+
     return parser.parse_args()
 
 
@@ -174,4 +188,5 @@ if __name__ == "__main__":
         current_user=args.current_user,
         target_user=args.target_user,
         enable_dry=args.enable_dry,
+        enable_verify=args.enable_verify,
     )
