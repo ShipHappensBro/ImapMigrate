@@ -12,11 +12,15 @@ from services.imap.messages.interfaces import (
 
 
 class ImapMessagesComparer(IImapMessagesComparer):
+    """Класс для сравнения количества сообщений между папок серверов imap"""
     def compare(self, source_imap: IMAP4_SSL, targe_imap: IMAP4_SSL) -> bool:
         raise NotImplementedError()
 
 
 class ImapMessageVerifier(IImapMessageVerifier):
+    """Реализация интерфейса для проверки количества сообщений между папками IMAP-серверов.
+    Используется после миграции.
+    """
     def verify(
         self,
         source_folders: list[ImapFolder],
@@ -26,7 +30,21 @@ class ImapMessageVerifier(IImapMessageVerifier):
         target_provider: IImapFolderProvider,
         target_imap: IMAP4_SSL,
     ) -> bool:
+        """
+        Основная функция сверки количества сообщений
+        между целевым и исходным серверами. Проводится после миграции
 
+        Args:
+            source_folders (list[ImapFolder]): Список папок исходного сервера
+            target_user (str): Целевой пользователь
+            target_imap_message_counter (IImapMessageCounter): Класс ответственный за подсчет сообщений
+            target_authenticator (IImapAuthenticator): Класс ответственный за plain авторизацию
+            target_provider (IImapFolderProvider): Провайдер папок
+            target_imap (IMAP4_SSL): Объект целевого imap сервера 
+
+        Returns:
+            bool: True в случае полного совпадения количества сообщений, False в обратном
+        """
         target_authenticator.authenticate(target_user, target_imap)
         target_folders = target_provider.get(target_imap)
 
@@ -64,4 +82,4 @@ class ImapMessageVerifier(IImapMessageVerifier):
                 tf.name,
                 tf.msg_count,
             )
-        return bool(errors)
+        return not(bool(errors))

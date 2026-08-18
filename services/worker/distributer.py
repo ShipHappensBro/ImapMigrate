@@ -5,7 +5,18 @@ from services.worker.interfaces import IWorkerDistributer
 
 
 class WorkerDistributer(IWorkerDistributer):
+    """Реализация распределения папок по рабочим"""
     def distribute(self, folders: list[ImapFolder], workers_count: int) -> list[Worker]:
+        """
+        Распределяет папки по рабочим в ~равном количестве
+
+        Args:
+            folders (list[ImapFolder]): Список imap папок
+            workers_count (int): Количество папок
+
+        Returns:
+            list[Worker]: Список рабочих
+        """
         workers = [
             Worker(
                 id=i + 1,

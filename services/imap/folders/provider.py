@@ -1,10 +1,15 @@
 import imaplib
 
 from dto.imap_folder import ImapFolder
-from services.imap.folders.interfaces import IImapFolderParser, IImapFolderProvider
+from services.imap.folders.interfaces import (
+    IImapFolderParser,
+    IImapFolderProvider,
+)
 
 
 class ImapFolderProvider(IImapFolderProvider):
+    """Класс выдающий папки с imap пользователя"""
+
     def __init__(self, parser: IImapFolderParser) -> None:
         self.parser = parser
 
@@ -12,6 +17,18 @@ class ImapFolderProvider(IImapFolderProvider):
         self,
         imap: imaplib.IMAP4_SSL,
     ) -> list[ImapFolder]:
+        """
+        Получение готовых к использованию папок imap в виде объекта ImapFolder 
+
+        Args:
+            imap (imaplib.IMAP4_SSL): Объект imap сервера
+
+        Raises:
+            RuntimeError: Если сервер возвращает ошибку при получении папок.
+
+        Returns:
+            list[ImapFolder]: Список Imap папок
+        """
         status, folders = imap.list()
 
         if status != "OK" or folders is None:

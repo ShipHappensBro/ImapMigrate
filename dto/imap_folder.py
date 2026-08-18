@@ -2,8 +2,9 @@ from dataclasses import dataclass
 from typing import Any
 
 
-@dataclass()
+@dataclass
 class ImapFolder:
+    """DTO-класс, представляющий папку IMAP."""
     name: str
     imap_name: str | Any
     flags: tuple[str, ...]

@@ -7,6 +7,17 @@ load_dotenv("./.env")
 
 
 def get_env(name: str) -> str:
+    """Получает обязательную переменную окружения.
+
+    Args:
+        name: Имя переменной окружения.
+
+    Raises:
+        RuntimeError: Если переменная окружения не задана или пуста.
+
+    Returns:
+        Значение переменной окружения.
+    """
     value = os.getenv(name)
 
     if not value:
@@ -30,12 +41,12 @@ PASSWORD_TARGET = get_env("PASSWORD_TARGET")
 
 __all__ = (
     "AUTH_USER_SOURCE",
-    "PASSWORD_SOURCE",
     "AUTH_USER_TARGET",
+    "LOG_DIR",
+    "PASSWORD_SOURCE",
     "PASSWORD_TARGET",
-    "SOURCE_SERVER",
-    "TARGET_SERVER",
     "PORT_SOURCE",
     "PORT_TARGET",
-    "LOG_DIR",
+    "SOURCE_SERVER",
+    "TARGET_SERVER",
 )

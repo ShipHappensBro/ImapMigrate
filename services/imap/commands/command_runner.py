@@ -11,6 +11,7 @@ from services.imap.events import STOP_EVENT
 
 
 class Runner(Protocol):
+    """Интерфейс раннера ответственного за создание сессии imapsync"""
     def __call__(
         self,
         log_file: Path,
@@ -28,6 +29,19 @@ def default_runner(
     command: tuple[str, ...],
     progress: tqdm,
 ):
+    """
+    Раннер по умолчанию
+
+    Args:
+        log_file (Path): путь к лог файлу
+        name (str): Название модуля
+        process_name (str): Название процесса
+        command (tuple[str, ...]): Кортеж команд для imapsync
+        progress (tqdm): Tqdm объект для отслеживания процесса
+
+    Raises:
+        ImapSyncFinishedWithNonZeroCode: Если imapsync вышел с ненулевым статусом
+    """
     try:
         with log_file.open("w", encoding="utf-8") as log:
             process = subprocess.Popen(
@@ -97,12 +111,13 @@ def command_configurate(
     *args,
     **kwargs,
 ):
-    """_summary_
+    """
+    Отвечает за формирование раннера
 
     Args:
-        progress (tqdm): _description_
-        runner (Runner, optional): _description_. Defaults to default_runner.
-        name (str, optional): _description_. Defaults to "migration".
+        progress (tqdm): Tqdm объект для отслеживания процесса
+        runner (Runner, optional): Объект раннера. Defaults to default_runner.
+        name (str, optional): Название модуля. Defaults to "migration".
     """
     safe_name = name.replace("/", "_")
     log_file = LOG_DIR / f"{safe_name}.log"
