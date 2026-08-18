@@ -7,6 +7,17 @@ load_dotenv("./.env")
 
 
 def get_env(name: str) -> str:
+    """Получает обязательную переменную окружения.
+
+    Args:
+        name: Имя переменной окружения.
+
+    Raises:
+        RuntimeError: Если переменная окружения не задана или пуста.
+
+    Returns:
+        Значение переменной окружения.
+    """
     value = os.getenv(name)
 
     if not value:

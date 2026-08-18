@@ -10,6 +10,16 @@ def get_source_folders(
     source_imap: imaplib.IMAP4_SSL,
     current_user: str,
 ) -> list[ImapFolder]:
+    """
+    Получение папок с исходного сервера
+
+    Args:
+        source_imap (imaplib.IMAP4_SSL): Объект imap сервера
+        current_user (str): email исходного пользователя
+
+    Returns:
+        list[ImapFolder]: Список imap папок
+    """
     authenticator = ImapAuthenticator(AUTH_USER_SOURCE, PASSWORD_SOURCE)
     folder_parser = ImapFolderParser()
     folder_provider = ImapFolderProvider(folder_parser)

@@ -6,6 +6,7 @@ from services.imap.folders.interfaces import IImapSyncFolderRunner
 
 
 class ImapSyncFolderRunner(IImapSyncFolderRunner):
+    """Основной класс для запуска imapsync"""
     def run(
         self,
         folder: ImapFolder,
@@ -21,6 +22,23 @@ class ImapSyncFolderRunner(IImapSyncFolderRunner):
         port1: int = 993,
         port2: int = 993,
     ):
+        """
+        Запуск imapsync процесса с передачей аргументов
+
+        Args:
+            folder (ImapFolder): Объект папки imap
+            host1 (str): Исходный сервер
+            host2 (str): Целевой сервер
+            user1 (str): Исходный пользователь
+            user2 (str): Целевой пользователь
+            auth_user1 (str): Исходная имперсонированная учетная запись
+            auth_user2 (str): Целевая имперсонированная учетная запись
+            password1 (str):  Исходный пароль имперсонированный учетной записи
+            password2 (str): Целевой пароль имперсонированный учетной записи
+            progress (tqdm): tqdm объект для отслеживания прогресса
+            port1 (int, optional): Исходный порт. Defaults to 993.
+            port2 (int, optional): Целевой порт. Defaults to 993.
+        """
         command = (
             "./imapsync",
             "--host1",

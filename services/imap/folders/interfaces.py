@@ -9,6 +9,7 @@ from dto.imap_folder import ImapFolder
 
 
 class IImapFolderProvider(ABC):
+    """Интерфейс выдачи папки с сервера imap"""
     @abstractmethod
     def get(
         self,
@@ -17,11 +18,13 @@ class IImapFolderProvider(ABC):
 
 
 class IImapFolderParser(ABC):
+    """Интерфейс парсера байтов папок с сервера imap"""
     @abstractmethod
     def parse(self, raw_folder: bytes) -> ImapFolder: ...
 
 
 class IImapSyncFolderRunner(Protocol):
+    """Интерфейс запуска ImapSync"""
     def run(
         self,
         folder: ImapFolder,
