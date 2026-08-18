@@ -1,87 +1,32 @@
-import argparse
 import imaplib
-from concurrent.futures import ThreadPoolExecutor
-
-from tqdm import tqdm
 
 from config.settings import *
 from logger import logger
+from orchestration.migration import start_migration
+from orchestration.parse_args import parse_args
+from orchestration.verifier import verify
 from services.imap import *
-from services.imap.dry_run.runner import ImapSyncDryRun
+from services.imap.dry_run.runner import dry_run
+from services.imap.folders.source import get_source_folders
 from services.worker import WorkerDistributer, WorkerRunner
-from verifier import verify
 
 
 def main(
     current_user: str, target_user: str, enable_dry: bool, enable_verify: bool
 ) -> None:
     if enable_dry:
-        ImapSyncDryRun().dry_run(
-            host1=SOURCE_SERVER,
-            host2=TARGET_SERVER,
-            port1=PORT_SOURCE,
-            port2=PORT_TARGET,
-            user1=current_user,
-            user2=target_user,
-            auth_user1=AUTH_USER_SOURCE,
-            auth_user2=AUTH_USER_TARGET,
-            password1=PASSWORD_SOURCE,
-            password2=PASSWORD_TARGET,
-        )
+        dry_run(current_user, target_user)
+
     logger.info(
         "Начинаем миграцию: {} -> {}",
         current_user,
         target_user,
     )
-    authenticator = ImapAuthenticator(AUTH_USER_SOURCE, PASSWORD_SOURCE)
-    folder_parser = ImapFolderParser()
-    folder_provider = ImapFolderProvider(folder_parser)
-
-    message_counter = ImapMessageCounter()
-
     source_imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
 
-    try:
-        logger.info("Подключение к IMAP: {}:{}", SOURCE_SERVER, PORT_SOURCE)
-        authenticator.authenticate(
-            user=current_user,
-            imap=source_imap,
-        )
-        logger.success(
-            "Авторизация пользователя {} выполнена",
-            current_user,
-        )
-
-        source_folders = folder_provider.get(source_imap)
-        logger.info(
-            "Получено папок: {}",
-            len(source_folders),
-        )
-        for folder in source_folders:
-            folder.msg_count = message_counter.get_count(
-                imap=source_imap,
-                folder=folder,
-            )
-            logger.debug(
-                "Папка: {} [{}] — {} сообщений",
-                folder.name,
-                folder.imap_name,
-                folder.msg_count,
-            )
-
-    except Exception:
-        logger.exception(
-            "Ошибка при получении данных исходного ящика",
-        )
-        raise
-
-    finally:
-        try:
-            source_imap.close()
-        except Exception:  # noqa: BLE001
-            logger.exception(
-                "Не удалось корректно закрыть IMAP-соединение",
-            )
+    source_folders = get_source_folders(
+        source_imap=source_imap, current_user=current_user
+    )
 
     workers_count = min(len(source_folders), 16)
 
@@ -100,85 +45,23 @@ def main(
 
     runner = WorkerRunner()
 
-    with (
-        tqdm(
-            total=len(source_folders),
-            desc="Migration",
-            unit="folder",
-        ) as progress,
-        ThreadPoolExecutor(
-            max_workers=workers_count,
-        ) as executor,
-    ):
-        futures = [
-            executor.submit(
-                runner.run,
-                worker_data.id,
-                folders=worker_data.folders,
-                host1=SOURCE_SERVER,
-                host2=TARGET_SERVER,
-                port1=PORT_SOURCE,
-                port2=PORT_TARGET,
-                user1=current_user,
-                user2=target_user,
-                auth_user1=AUTH_USER_SOURCE,
-                auth_user2=AUTH_USER_TARGET,
-                password1=PASSWORD_SOURCE,
-                password2=PASSWORD_TARGET,
-                progress=progress,
-            )
-            for worker_data in workers
-        ]
-
-        for future in futures:
-            try:
-                future.result()
-            except RuntimeError:
-                logger.exception(
-                    "Ошибка при выполнении worker",
-                )
+    start_migration(
+        source_folders=source_folders,
+        workers_count=workers_count,
+        runner=runner,
+        workers=workers,
+        current_user=current_user,
+        target_user=target_user,
+    )
 
     logger.success(
         "Миграция {} -> {} завершена",
         current_user,
         target_user,
     )
+
     if enable_verify:
         verify(source_folders, target_user)
-
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="IMAP mailbox migration",
-    )
-
-    parser.add_argument(
-        "current_user",
-        help="Исходный IMAP пользователь",
-    )
-
-    parser.add_argument(
-        "target_user",
-        help="Целевой IMAP пользователь",
-    )
-
-    parser.add_argument(
-        "--dry",
-        dest="enable_dry",
-        action="store_true",
-        default=False,
-        help="Включить dry-run",
-    )
-
-    parser.add_argument(
-        "--verify",
-        dest="enable_verify",
-        action="store_true",
-        default=False,
-        help="Включить проверку количества сообщений между серверами",
-    )
-
-    return parser.parse_args()
 
 
 if __name__ == "__main__":
