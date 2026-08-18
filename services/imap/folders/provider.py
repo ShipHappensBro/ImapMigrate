@@ -1,7 +1,10 @@
 import imaplib
 
 from dto.imap_folder import ImapFolder
-from services.imap.folders.interfaces import IImapFolderParser, IImapFolderProvider
+from services.imap.folders.interfaces import (
+    IImapFolderParser,
+    IImapFolderProvider,
+)
 
 
 class ImapFolderProvider(IImapFolderProvider):
