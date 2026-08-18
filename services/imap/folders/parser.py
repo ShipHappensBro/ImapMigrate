@@ -6,7 +6,20 @@ from utils.re_pattern import LIST_PATTERN
 
 
 class ImapFolderParser(IImapFolderParser):
+    """Класс парсера полученных сырых папок с сервера"""
     def parse(self, raw_folder: bytes) -> ImapFolder:
+        """
+        Парсер байто в объект ImapFolder
+
+        Args:
+            raw_folder (bytes): Cырые байты полученные от сервера imap
+
+        Raises:
+            ValueError: Если не подошел паттерн re
+
+        Returns:
+            ImapFolder: Объект ImapFolder
+        """
         match = LIST_PATTERN.match(raw_folder)
 
         if not match:

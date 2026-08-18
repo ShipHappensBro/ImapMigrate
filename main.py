@@ -14,6 +14,15 @@ from services.worker import WorkerDistributer, WorkerRunner
 def main(
     current_user: str, target_user: str, enable_dry: bool, enable_verify: bool
 ) -> None:
+    """
+    Головная функция проекта. Точка входа
+
+    Args:
+        current_user (str): Исходный email пользователя
+        target_user (str): Целевой email пользователя
+        enable_dry (bool): Включить dry-run
+        enable_verify (bool): Включить проверку колтчества сообщений между серверами
+    """
     if enable_dry:
         dry_run(current_user, target_user)
 
@@ -54,14 +63,18 @@ def main(
         target_user=target_user,
     )
 
+    if enable_verify and not verify(source_folders, target_user):
+        logger.warning(
+            "Миграция {} -> {} завершена с ошибками",
+            current_user,
+            target_user,
+        )
+        return
     logger.success(
         "Миграция {} -> {} завершена",
         current_user,
         target_user,
     )
-
-    if enable_verify:
-        verify(source_folders, target_user)
 
 
 if __name__ == "__main__":

@@ -18,6 +18,17 @@ def start_migration(
     current_user: str,
     target_user: str,
 ):
+    """
+    Начать миграцию папок между серверами
+
+    Args:
+        source_folders (list[ImapFolder]): Список объектов imap папок
+        workers_count (int): Количество рабочих
+        runner (WorkerRunner): Объект WorkerRunner
+        workers (list[Worker]): Список объектов консалидированных рабочих
+        current_user (str): email исходного пользователя 
+        target_user (str): email целевого пользователя
+    """
     with (
         tqdm(
             total=len(source_folders),

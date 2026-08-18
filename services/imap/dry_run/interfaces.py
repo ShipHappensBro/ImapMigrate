@@ -2,6 +2,7 @@ from typing import Protocol
 
 
 class IImapSyncDryRun(Protocol):
+    """Интерфейс dry-run запуска imapsync"""
     def dry_run(
         self,
         host1: str,

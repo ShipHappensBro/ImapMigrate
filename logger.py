@@ -4,6 +4,7 @@ from tqdm import tqdm
 
 
 class TqdmHandler:
+    """Адаптер для перенаправления вывода в tqdm"""
     def write(self, message: str) -> None:
         message = message.rstrip()
 

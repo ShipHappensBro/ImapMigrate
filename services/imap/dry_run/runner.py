@@ -8,6 +8,7 @@ from services.imap.events import STOP_EVENT
 
 
 class ImapSyncDryRun(IImapSyncDryRun):
+    """Реализация запуска dry-run режима imapsync"""
     def dry_run(
         self,
         host1: str,
@@ -21,6 +22,20 @@ class ImapSyncDryRun(IImapSyncDryRun):
         port1: int = 993,
         port2: int = 993,
     ) -> None:
+        """_summary_
+
+        Args:
+            host1 (str): Исходный сервер
+            host2 (str): Целевой сервер
+            user1 (str): Исходный пользователь
+            user2 (str): Целевой пользователь
+            auth_user1 (str): Исходная имперсонированная учетная запись
+            auth_user2 (str): Целевая имперсонированная учетная запись
+            password1 (str):  Исходный пароль имперсонированный учетной записи
+            password2 (str): Целевой пароль имперсонированный учетной записи
+            port1 (int, optional): Исходный порт. Defaults to 993.
+            port2 (int, optional): Целевой порт. Defaults to 993.
+        """
         if STOP_EVENT.is_set():
             return
         command: tuple[str, ...] = (

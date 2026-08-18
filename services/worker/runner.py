@@ -5,8 +5,18 @@ from services.worker.interfaces import IWorkerRunner
 
 
 class WorkerRunner(IWorkerRunner):
-    def run(self, id: int, folders: list[ImapFolder], *args, **kwargs) -> None:
+    """
+    Класс рабочего для запуска imapsync реализации
 
+    """
+    def run(self, id: int, folders: list[ImapFolder], *args, **kwargs) -> None:
+        """
+        Основная функция запуска миграции папок между серверами
+
+        Args:
+            id (int): идентификатор рабочего
+            folders (list[ImapFolder]): список папок
+        """
         message_count = sum(folder.msg_count for folder in folders)
 
         logger.info(

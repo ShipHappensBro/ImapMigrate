@@ -2,6 +2,7 @@ from pathlib import Path
 
 
 class ImapSyncFinishedWithNonZeroCode(Exception):
+    """Класс исключение, если imapsync вышел с ненулевым статусом"""
     def __init__(
         self,
         code: int,

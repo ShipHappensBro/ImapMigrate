@@ -2,6 +2,12 @@ import argparse
 
 
 def parse_args() -> argparse.Namespace:
+    """
+    Парсинг аргументов проекта для работы с CLI
+
+    Returns:
+        argparse.Namespace
+    """
     parser = argparse.ArgumentParser(
         description="IMAP mailbox migration",
     )
