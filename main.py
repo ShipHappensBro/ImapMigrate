@@ -12,7 +12,7 @@ from services.worker import WorkerDistributer, WorkerRunner
 
 
 def main(
-    current_user: str, target_user: str, enable_dry: bool,
+    source_user: str, target_user: str, enable_dry: bool,
     enable_verify: bool, workers_count: int
 ) -> None:
     """
