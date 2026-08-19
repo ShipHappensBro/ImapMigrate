@@ -23,6 +23,13 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=8,
+        help="Количество рабочих процессов.",
+    )
+
+    parser.add_argument(
         "--dry",
         dest="enable_dry",
         action="store_true",

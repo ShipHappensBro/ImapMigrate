@@ -12,7 +12,8 @@ from services.worker import WorkerDistributer, WorkerRunner
 
 
 def main(
-    current_user: str, target_user: str, enable_dry: bool, enable_verify: bool
+    current_user: str, target_user: str, enable_dry: bool,
+    enable_verify: bool, workers_count: int
 ) -> None:
     """
     Головная функция проекта. Точка входа
@@ -31,13 +32,17 @@ def main(
         current_user,
         target_user,
     )
+    logger.debug(
+        "Количество рабочих: {}",
+        workers_count
+    )
     source_imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
 
     source_folders = get_source_folders(
         source_imap=source_imap, current_user=current_user
     )
 
-    workers_count = min(len(source_folders), 16)
+    workers_count = min(len(source_folders), workers_count)
 
     logger.info(
         "Запускаем миграцию: {} папок, {} workers",
@@ -85,4 +90,5 @@ if __name__ == "__main__":
         target_user=args.target_user,
         enable_dry=args.enable_dry,
         enable_verify=args.enable_verify,
+        workers_count=args.workers
     )
