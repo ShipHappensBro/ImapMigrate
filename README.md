@@ -136,29 +136,29 @@ chmod +x ./imapsync
 Создайте файл `.env` в корне проекта:
 
 ```dotenv
-AUTH_USER_SOURCE = "example@example.ru"
-PASSWORD_SOURCE = "superpass_source"
-AUTH_USER_TARGET = "example@example.org"
-PASSWORD_TARGET = "superpass_target"
+SOURCE__SERVER=mail.example.ru
+SOURCE__PORT=993
+SOURCE__AUTH_USER=example@example.ru
+SOURCE__PASSWORD=superpass_source
 
-SOURCE_SERVER = "mail.example.ru"
-TARGET_SERVER = "mail.example.org"
-PORT_SOURCE = 993
-PORT_TARGET = 993
+TARGET__SERVER=mail.example.org
+TARGET__PORT=993
+TARGET__AUTH_USER=example@example.org
+TARGET__PASSWORD=superpass_target
 ```
 
 ### Описание параметров
 
-| Переменная         | Назначение                                    |
-|--------------------|-----------------------------------------------|
-| `SOURCE_SERVER`    | IMAP-сервер источника                         |
-| `PORT_SOURCE`      | IMAP-порт сервера источника                   |
-| `AUTH_USER_SOURCE` | Учетная запись имперсонации источника         |
-| `PASSWORD_SOURCE`  | Пароль учетной записи имперсонации источника  |
-| `TARGET_SERVER`    | IMAP-сервер назначения                        |
-| `PORT_TARGET`      | IMAP-порт назначения источника                |
-| `AUTH_USER_TARGET` | Учетная запись имперсонации назначения        |
-| `PASSWORD_TARGET`  | Пароль учетной записи имперсонации назначения |
+| Переменная          | Назначение                                    |
+|---------------------|-----------------------------------------------|
+| `SOURCE__SERVER`    | IMAP-сервер источника                         |
+| `SOURCE__PORT`      | IMAP-порт сервера источника                   |
+| `SOURCE__AUTH_USER` | Учетная запись имперсонации источника         |
+| `SOURCE__PASSWORD`  | Пароль учетной записи имперсонации источника  |
+| `TARGET__SERVER`    | IMAP-сервер назначения                        |
+| `TARGET__PORT`      | IMAP-порт назначения источника                |
+| `TARGET__AUTH_USER` | Учетная запись имперсонации назначения        |
+| `TARGET__PASSWORD`  | Пароль учетной записи имперсонации назначения |
 
 > **Важно:** файл `.env` содержит учётные данные и не должен попадать в Git.
 
