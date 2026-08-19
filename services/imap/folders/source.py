@@ -8,14 +8,14 @@ from services.imap import *
 
 def get_source_folders(
     source_imap: imaplib.IMAP4_SSL,
-    current_user: str,
+    source_user: str,
 ) -> list[ImapFolder]:
     """
     Получение папок с исходного сервера
 
     Args:
         source_imap (imaplib.IMAP4_SSL): Объект imap сервера
-        current_user (str): email исходного пользователя
+        source_user (str): email исходного пользователя
 
     Returns:
         list[ImapFolder]: Список imap папок
@@ -29,12 +29,12 @@ def get_source_folders(
     try:
         logger.info("Подключение к IMAP: {}:{}", SOURCE_SERVER, PORT_SOURCE)
         authenticator.authenticate(
-            user=current_user,
+            user=source_user,
             imap=source_imap,
         )
         logger.success(
             "Авторизация пользователя {} выполнена",
-            current_user,
+            source_user,
         )
 
         source_folders = folder_provider.get(source_imap)

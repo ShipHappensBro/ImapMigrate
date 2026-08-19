@@ -13,13 +13,20 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "current_user",
+        "source_user",
         help="Исходный IMAP пользователь",
     )
 
     parser.add_argument(
         "target_user",
         help="Целевой IMAP пользователь",
+    )
+
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=8,
+        help="Количество рабочих процессов.",
     )
 
     parser.add_argument(
