@@ -179,12 +179,12 @@ python main.py --help
 Пример:
 
 ```text
-usage: main.py [-h] [--dry] [--verify] current_user target_user
+usage: main.py [-h] [--dry] [--verify] source_user target_user
 
 IMAP mailbox migration
 
 positional arguments:
-  current_user  Исходный IMAP пользователь
+  source_user  Исходный IMAP пользователь
   target_user   Целевой IMAP пользователь
 
 options:
