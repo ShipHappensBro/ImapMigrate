@@ -5,13 +5,14 @@ from typing import Protocol
 from loguru import logger
 from tqdm import tqdm
 
-from config.settings import LOG_DIR
+from config.settings import settings
 from services.imap.commands.exceptions import ImapSyncFinishedWithNonZeroCode
 from services.imap.events import STOP_EVENT
 
 
 class Runner(Protocol):
     """Интерфейс раннера ответственного за создание сессии imapsync"""
+
     def __call__(
         self,
         log_file: Path,
@@ -42,6 +43,9 @@ def default_runner(
     Raises:
         ImapSyncFinishedWithNonZeroCode: Если imapsync вышел с ненулевым статусом
     """
+
+    process: subprocess.Popen[bytes] | None = None
+
     try:
         with log_file.open("w", encoding="utf-8") as log:
             process = subprocess.Popen(
@@ -120,7 +124,7 @@ def command_configurate(
         name (str, optional): Название модуля. Defaults to "migration".
     """
     safe_name = name.replace("/", "_")
-    log_file = LOG_DIR / f"{safe_name}.log"
+    log_file = settings.log_dir / f"{safe_name}.log"
     try:
         runner(
             name=name,

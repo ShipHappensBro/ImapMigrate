@@ -1,6 +1,6 @@
 import imaplib
 
-from config.settings import *
+from config.settings import settings
 from dto.imap_folder import ImapFolder
 from services.imap import *
 from services.imap.messages.checker import ImapMessageVerifier
@@ -18,10 +18,10 @@ def verify(source_folders: list[ImapFolder], target_user: str) -> bool:
         bool: True если прошло без ошибок, False в обратном
     """
     target_msg_counter = ImapMessageCounter()
-    target_authenticator = ImapAuthenticator(AUTH_USER_TARGET, PASSWORD_TARGET)
+    target_authenticator = ImapAuthenticator(settings.target.auth_user, settings.target.password.get_secret_value())
     target_parser = ImapFolderParser()
     target_provider = ImapFolderProvider(target_parser)
-    target_imap = imaplib.IMAP4_SSL(TARGET_SERVER, PORT_TARGET)
+    target_imap = imaplib.IMAP4_SSL(settings.target.server, settings.target.port)
     msg_verifer = ImapMessageVerifier()
     return msg_verifer.verify(
         source_folders=source_folders,
