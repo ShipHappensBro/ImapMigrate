@@ -80,13 +80,13 @@ class ImapSyncDryRun(IImapSyncDryRun):
             )
 
 
-def dry_run(current_user: str, target_user: str):
+def dry_run(source_user: str, target_user: str):
     ImapSyncDryRun().dry_run(
         host1=SOURCE_SERVER,
         host2=TARGET_SERVER,
         port1=PORT_SOURCE,
         port2=PORT_TARGET,
-        user1=current_user,
+        user1=source_user,
         user2=target_user,
         auth_user1=AUTH_USER_SOURCE,
         auth_user2=AUTH_USER_TARGET,

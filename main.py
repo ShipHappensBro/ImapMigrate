@@ -19,17 +19,17 @@ def main(
     Головная функция проекта. Точка входа
 
     Args:
-        current_user (str): Исходный email пользователя
+        source_user (str): Исходный email пользователя
         target_user (str): Целевой email пользователя
         enable_dry (bool): Включить dry-run
         enable_verify (bool): Включить проверку колтчества сообщений между серверами
     """
     if enable_dry:
-        dry_run(current_user, target_user)
+        dry_run(source_user, target_user)
 
     logger.info(
         "Начинаем миграцию: {} -> {}",
-        current_user,
+        source_user,
         target_user,
     )
     logger.debug(
@@ -39,7 +39,7 @@ def main(
     source_imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
 
     source_folders = get_source_folders(
-        source_imap=source_imap, current_user=current_user
+        source_imap=source_imap, source_user=source_user
     )
 
     workers_count = min(len(source_folders), workers_count)
@@ -64,20 +64,20 @@ def main(
         workers_count=workers_count,
         runner=runner,
         workers=workers,
-        current_user=current_user,
+        source_user=source_user,
         target_user=target_user,
     )
 
     if enable_verify and not verify(source_folders, target_user):
         logger.warning(
             "Миграция {} -> {} завершена с ошибками",
-            current_user,
+            source_user,
             target_user,
         )
         return
     logger.success(
         "Миграция {} -> {} завершена",
-        current_user,
+        source_user,
         target_user,
     )
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     main(
-        current_user=args.current_user,
+        source_user=args.source_user,
         target_user=args.target_user,
         enable_dry=args.enable_dry,
         enable_verify=args.enable_verify,

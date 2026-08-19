@@ -15,7 +15,7 @@ def start_migration(
     workers_count: int,
     runner: WorkerRunner,
     workers: list[Worker],
-    current_user: str,
+    source_user: str,
     target_user: str,
 ):
     """
@@ -26,7 +26,7 @@ def start_migration(
         workers_count (int): Количество рабочих
         runner (WorkerRunner): Объект WorkerRunner
         workers (list[Worker]): Список объектов консалидированных рабочих
-        current_user (str): email исходного пользователя 
+        source_user (str): email исходного пользователя 
         target_user (str): email целевого пользователя
     """
     with (
@@ -48,7 +48,7 @@ def start_migration(
                 host2=TARGET_SERVER,
                 port1=PORT_SOURCE,
                 port2=PORT_TARGET,
-                user1=current_user,
+                user1=source_user,
                 user2=target_user,
                 auth_user1=AUTH_USER_SOURCE,
                 auth_user2=AUTH_USER_TARGET,

@@ -13,7 +13,7 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "current_user",
+        "source_user",
         help="Исходный IMAP пользователь",
     )
 
