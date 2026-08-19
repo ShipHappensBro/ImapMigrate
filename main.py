@@ -1,6 +1,6 @@
 import imaplib
 
-from config.settings import *
+from config.settings import settings
 from logger import logger
 from orchestration.migration import start_migration
 from orchestration.parse_args import parse_args
@@ -36,7 +36,7 @@ def main(
         "Количество рабочих: {}",
         workers_count
     )
-    source_imap = imaplib.IMAP4_SSL(SOURCE_SERVER, PORT_SOURCE)
+    source_imap = imaplib.IMAP4_SSL(settings.source.server, settings.source.port)
 
     source_folders = get_source_folders(
         source_imap=source_imap, source_user=source_user

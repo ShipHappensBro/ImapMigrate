@@ -1,7 +1,7 @@
 from loguru import logger
 from tqdm import tqdm
 
-from config.settings import *
+from config.settings import settings
 from services.imap.commands.command_runner import command_configurate
 from services.imap.dry_run.interfaces import IImapSyncDryRun
 from services.imap.events import STOP_EVENT
@@ -82,14 +82,14 @@ class ImapSyncDryRun(IImapSyncDryRun):
 
 def dry_run(source_user: str, target_user: str):
     ImapSyncDryRun().dry_run(
-        host1=SOURCE_SERVER,
-        host2=TARGET_SERVER,
-        port1=PORT_SOURCE,
-        port2=PORT_TARGET,
+        host1=settings.source.server,
+        host2=settings.target.server,
+        port1=settings.source.port,
+        port2=settings.target.port,
         user1=source_user,
         user2=target_user,
-        auth_user1=AUTH_USER_SOURCE,
-        auth_user2=AUTH_USER_TARGET,
-        password1=PASSWORD_SOURCE,
-        password2=PASSWORD_TARGET,
+        auth_user1=settings.source.auth_user,
+        auth_user2=settings.target.auth_user,
+        password1=settings.source.password.get_secret_value(),
+        password2=settings.target.password.get_secret_value(),
     )

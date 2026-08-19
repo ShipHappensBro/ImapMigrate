@@ -1,6 +1,6 @@
 import imaplib
 
-from config.settings import *
+from config.settings import settings
 from dto.imap_folder import ImapFolder
 from logger import logger
 from services.imap import *
@@ -20,14 +20,14 @@ def get_source_folders(
     Returns:
         list[ImapFolder]: Список imap папок
     """
-    authenticator = ImapAuthenticator(AUTH_USER_SOURCE, PASSWORD_SOURCE)
+    authenticator = ImapAuthenticator(settings.source.auth_user, settings.source.password.get_secret_value())
     folder_parser = ImapFolderParser()
     folder_provider = ImapFolderProvider(folder_parser)
 
     message_counter = ImapMessageCounter()
 
     try:
-        logger.info("Подключение к IMAP: {}:{}", SOURCE_SERVER, PORT_SOURCE)
+        logger.info("Подключение к IMAP: {}:{}", settings.source.server, settings.source.port)
         authenticator.authenticate(
             user=source_user,
             imap=source_imap,
