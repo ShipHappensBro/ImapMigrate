@@ -1,6 +1,5 @@
 import imaplib
 from abc import ABC, abstractmethod
-from pathlib import Path
 from typing import Protocol
 
 from tqdm import tqdm
@@ -10,6 +9,7 @@ from dto.imap_folder import ImapFolder
 
 class IImapFolderProvider(ABC):
     """Интерфейс выдачи папки с сервера imap"""
+
     @abstractmethod
     def get(
         self,
@@ -19,16 +19,17 @@ class IImapFolderProvider(ABC):
 
 class IImapFolderParser(ABC):
     """Интерфейс парсера байтов папок с сервера imap"""
+
     @abstractmethod
     def parse(self, raw_folder: bytes) -> ImapFolder: ...
 
 
 class IImapSyncFolderRunner(Protocol):
     """Интерфейс запуска ImapSync"""
+
     def run(
         self,
         folder: ImapFolder,
-        log_file: Path,
         host1: str,
         host2: str,
         user1: str,
