@@ -237,10 +237,10 @@ logs/
 
 Папки обрабатываются через `ThreadPoolExecutor`.
 
-Количество workers определяется автоматически:
+Количество workers определяется автоматически, но максимально задается через cli:
 
 ```python
-workers_count = min(len(folders), 16)
+workers_count = min(len(folders), workers_count)
 ```
 
 Папки распределяются между workers с учётом количества сообщений.
