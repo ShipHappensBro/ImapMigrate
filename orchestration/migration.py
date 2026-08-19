@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from tqdm import tqdm
 
-from config.settings import *
+from config.settings import settings
 from dto.imap_folder import ImapFolder
 from dto.worker import Worker
 from logger import logger
@@ -26,7 +26,7 @@ def start_migration(
         workers_count (int): Количество рабочих
         runner (WorkerRunner): Объект WorkerRunner
         workers (list[Worker]): Список объектов консалидированных рабочих
-        source_user (str): email исходного пользователя 
+        source_user (str): email исходного пользователя
         target_user (str): email целевого пользователя
     """
     with (
@@ -44,16 +44,16 @@ def start_migration(
                 runner.run,
                 worker_data.id,
                 folders=worker_data.folders,
-                host1=SOURCE_SERVER,
-                host2=TARGET_SERVER,
-                port1=PORT_SOURCE,
-                port2=PORT_TARGET,
+                host1=settings.source.server,
+                host2=settings.target.server,
+                port1=settings.source.port,
+                port2=settings.target.port,
                 user1=source_user,
                 user2=target_user,
-                auth_user1=AUTH_USER_SOURCE,
-                auth_user2=AUTH_USER_TARGET,
-                password1=PASSWORD_SOURCE,
-                password2=PASSWORD_TARGET,
+                auth_user1=settings.source.auth_user,
+                auth_user2=settings.target.auth_user,
+                password1=settings.source.password.get_secret_value(),
+                password2=settings.target.password.get_secret_value(),
                 progress=progress,
             )
             for worker_data in workers
